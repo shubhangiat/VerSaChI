@@ -1,18 +1,13 @@
-# *ChiSeL*
+# *VerSaChI*
 
 ## Introduction
-*ChiSeL* is a novel algorithmic framework that uses the idea of
-statistical significance for approximate subgraph matching on
-uncertain graphs. For each candidate matching vertex in the target
-graph that matches a query vertex, it computes its statistical
-significance using the chi-squared statistic. The search algorithm
-then proceeds in a greedy manner by exploring the vertex neighbors
-having the largest chi-square score. The algorithm works well on
-large real-life graphs with millions of vertices and billions of
-edges and can compute answer seconds after reading the input graph.
+*VerSaChI* is an approximate subgraph matching framework based on 2-hop label
+and structural overlap similarity with the query. The similarity is
+characterized using Chebyshev’s inequality to compute the chi-square statistical
+significance for measuring the degree of matching of the subgraphs.
 
 Please cite our paper, if you use our source code.
-* "ChiSeL: Graph Similarity Search using Chi-Squared Statistics in Large Probabilistic Graphs. VLDB'20"
+* "VerSaChI: Finding Statistically Significant Subgraph Matches using Chebyshev's Inequality. CIKM'21"
 
 ## How to run the binary file?
 
@@ -26,25 +21,13 @@ make
 For instance,
 
 ```
-./subgraph ip_v15_label.txt ip_v15_edge.txt qry_graphs.txt
+./subgraph vlabel vedge arg_qfile
 ```
 
 ## Parameters
 
-The _k_ for top-_k_ matching subgraphs can be set in the _const.h_ header file.
-
-### Flags
-
-During compilation flags can be set in makefile.
-
-* __-DDMEASURE__  
-To measure heap sizes.
-
-* __-DPERTURB_CRIT__  
-To perturb the original graph at runtime. The probability of graph edges
-that match with the query graph edges are set to 1 before the subgraph
-search and are reset to old value after the computation of answers.  
-__Note:__ All query graph vertex-ids must match the input graph vertex-ids for this.
+The _k_ for top-_k_ matching subgraphs and the step size parameter _κ_ (used for
+discretizing standard deviations) can be set in the _const.h_ header file.
 
 ## Argument and Graph files format:
 
@@ -60,18 +43,16 @@ v3 l1
 
 ### Edge file
 
-File format: vid1 vid2 edge_probability
+File format: vid1 vid2
 
 e.g.
 ```
-v1 v2 pr12
-v2 v3 pr23
-v3 v1 pr31
+v1 v2
+v2 v3
+v3 v1
 ```
 
 This format is followed for both input target graph.
-For the query graph the edge file has only two values, the vertex ids of an edge.
-
 
 ### Format of third argument (list of query graph files)
 
